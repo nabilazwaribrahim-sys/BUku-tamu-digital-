@@ -53,6 +53,7 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            animation: slideDown 0.8s ease-out;
         }
 
         .header-brand {
@@ -68,6 +69,7 @@
             border-radius: 50%;
             border: 2px solid var(--primary-green);
             background: white;
+            animation: pulseLogo 3s infinite;
         }
 
         .header-brand div { line-height: 1.2; }
@@ -86,17 +88,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
         .nav-btn:hover {
             background-color: var(--secondary-green);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
         }
 
         /* --- Main Container --- */
         main {
-            flex: 1;
+            flex:1;
             max-width: 1000px;
             margin: 2rem auto;
             width: 95%;
@@ -119,6 +122,9 @@
             margin-bottom: 0;
             line-height:1.2;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            /* Animasi Teks Muncul */
+            opacity: 0;
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         
         .welcome-text span {
@@ -128,6 +134,9 @@
             display: block;
             margin-bottom: 2rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            /* Animasi Teks Muncul (Delay) */
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
         }
 
         .button-grid {
@@ -144,14 +153,26 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             cursor: pointer;
-            transition: all 0.3s ease;
+            /* Persiapan Animasi Staggered */
+            opacity: 0; 
+            transform: translateY(50px);
             border-bottom: 5px solid transparent;
             text-align: center;
             color: var(--text-dark);
         }
 
+        /* Trigger Animasi untuk Button Pertama (Pengunjung) */
+        #home-view .menu-card:nth-child(1) {
+            animation: slideUpFade 0.8s ease-out 0.8s forwards;
+        }
+
+        /* Trigger Animasi untuk Button Kedua (Partisipan) */
+        #home-view .menu-card:nth-child(2) {
+            animation: slideUpFade 0.8s ease-out 1.0s forwards;
+        }
+
         .menu-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
@@ -192,7 +213,7 @@
             padding: 2rem;
             position: relative;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            animation: slideUp 0.4s ease;
+            animation: slideUpModal 0.4s ease;
             max-height: 90vh;
             overflow-y: auto;
             text-align: center;
@@ -210,7 +231,7 @@
 
         .modal-header h3 {
             color: var(--primary-navy);
-            margin-bottom:1.5rem;
+            margin-bottom: 1.5rem;
             text-align: center;
             border-bottom: 2px solid #eee;
             padding-bottom: 1rem;
@@ -257,7 +278,7 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .submit-btn:hover { background: #002244; }
+        .submit-btn:hover { background: #002244; transform: translateY(-2px); }
 
         /* --- Error Message --- */
         .error-msg {
@@ -328,12 +349,46 @@
             color: white;
             font-size: 2.5rem;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+            animation: popIn 0.5s ease;
         }
 
         /* --- Animations --- */
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUpModal { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Animasi Header & Container */
+        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        
+        /* Animasi Welcome Text (Pop/Bal) */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            80% { transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animasi Card (Slide Up & Fade) */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseLogo {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
 
         footer { 
             text-align: center; 
@@ -389,11 +444,11 @@
                     <p>Untuk tamu umum atau instansi</p>
                 </div>
 
-                <!-- Tombol Peserta -->
+                <!-- Tombol Partisipan -->
                 <div class="menu-card blue" onclick="openModal('modal-peserta')">
                     <i class="fas fa-graduation-cap"></i>
-                    <h3>Peserta</h3>
-                    <p>Untuk peserta kegiatan/seminar</p>
+                    <h3>Partisipan</h3>
+                    <p>Untuk partisipan kegiatan/seminar</p>
                 </div>
             </div>
         </section>
@@ -410,7 +465,7 @@
                 </div>
                 <div class="stat-card">
                     <h3 id="count-peserta">0</h3>
-                    <p>Total Peserta</p>
+                    <p>Total Partisipan</p>
                 </div>
             </div>
 
@@ -424,7 +479,7 @@
                         <tr>
                             <th>Kategori</th>
                             <th>Nama</th>
-                            <th>Asal / Univ</th>
+                            <th>Asal / PT</th>
                             <th>Tanggal</th>
                         </tr>
                     </thead>
@@ -462,12 +517,12 @@
         </div>
     </div>
 
-    <!-- MODAL FORM PESERTA -->
+    <!-- MODAL FORM PARTISIPAN -->
     <div id="modal-peserta" class="modal-overlay">
         <div class="modal-box">
             <span class="close-modal" onclick="closeModal('modal-peserta')">&times;</span>
             <div class="modal-header">
-                <h3>Formulir Peserta</h3>
+                <h3>Formulir Partisipan</h3>
             </div>
             <form id="formPeserta" onsubmit="submitData(event, 'peserta')">
                 <div class="form-group">
@@ -475,8 +530,8 @@
                     <input type="text" name="nama" required placeholder="Masukkan nama lengkap...">
                 </div>
                 <div class="form-group">
-                    <label>Universitas</label>
-                    <input type="text" name="universitas" required placeholder="Asal Universitas...">
+                    <label>Perguruan Tinggi/ Lembaga</label>
+                    <input type="text" name="universitas" required placeholder="Contoh: PTN / Lembaga...">
                 </div>
                 <div class="form-group">
                     <label>Kesan dan Pesan</label>
@@ -533,10 +588,9 @@
     </footer>
 
     <script>
-        // --- KONFIGURASI URL ---
+        // --- KONFIGURASI URL (DIPERBARUI PARTISIPAN) ---
         const URL_PENGUNJUNG = "https://script.google.com/macros/s/AKfycbz_eROLjJhsLRHH0mBlHi48N2ADT2msNLvj6mAxwZzvyiU0Rpoc4RVhLcTfg3TIv34/exec";
-        // --- URL PESERTA DIPERBARUI ---
-        const URL_PESERTA = "https://script.google.com/macros/s/AKfycbzbiHnHMAnlKmCnZ35KL-1aRpSPmAjjctFjdz_2A5zJPKR4uU7ar43ucD3rXZgu5FUq0Q/exec";
+        const URL_PESERTA = "https://script.google.com/macros/s/AKfycbzulOb2j_b_O0YdBryII6_SYDgYVyWdJrykVQpQecfLKCyr7VBW9GOyj5QPxj3NvTj1_Q/exec";
         
         // --- KREDENSIAL LOGIN ---
         const ADMIN_USER = "ITdualtrck";
@@ -588,7 +642,7 @@
                 errorDiv.style.display = 'block';
                 document.getElementById('modal-login').querySelector('.modal-box').style.animation = 'shake 0.5s';
                 setTimeout(() => {
-                    document.getElementById('modal-login').querySelector('.modal-box').style.animation = 'slideUp 0.4s ease';
+                    document.getElementById('modal-login').querySelector('.modal-box').style.animation = 'slideUpModal 0.4s ease';
                 }, 500);
             }
         }
@@ -719,7 +773,7 @@
             if(Array.isArray(dataPeserta)) {
                 dataPeserta.forEach(item => {
                     allData.push({
-                        type: 'Peserta',
+                        type: 'Partisipan',
                         nama: item["Nama Lengkap"] || item.nama || item["nama"] || "Tanpa Nama",
                         asal: getSafeValue(item, 'peserta'),
                         date: item.tanggal || item["Tanggal"] || item["waktu"] || new Date().toISOString()
@@ -758,7 +812,7 @@
             chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Pengunjung', 'Peserta'],
+                    labels: ['Pengunjung', 'Partisipan'],
                     datasets: [{
                         data: [countPengunjung, countPeserta],
                         backgroundColor: ['#003366', '#28a745'],
